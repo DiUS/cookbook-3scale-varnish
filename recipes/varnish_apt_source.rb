@@ -17,5 +17,28 @@
 
 include_recipe "varnish::apt_repo"
 
+package 'libpcre3-dev'
+package 'python-docutils'
+
 execute "cd /usr/local/src && apt-get source varnish" do
+end
+
+execute "cd /usr/local/src/varnish-3.0.0 && ./autogen.sh" do
+  creates "/usr/local/src/varnish-3.0.0/configure"
+end
+
+execute "cd /usr/local/src/varnish-3.0.0 && ./configure" do
+  creates "/usr/local/src/varnish-3.0.0/Makefile"
+end
+
+execute "cd /usr/local/src/varnish-3.0.0 && make" do
+  creates "/usr/local/src/varnish-3.0.0/bin/varnishd"
+end
+
+execute "cd /usr/local/src/varnish-3.0.0/lib/libvmod_std && make install" do
+  creates "/usr/local/lib/varnish/vmods/libvmod_std.a"
+end
+
+link "/usr/lib/varnish/vmods" do
+  to "/usr/local/lib/varnish/vmods"
 end

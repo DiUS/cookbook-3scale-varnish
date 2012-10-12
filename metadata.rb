@@ -7,6 +7,7 @@ version          "0.1.0"
 
 depends          "apt"
 depends          "varnish"
+depends          "build-essential"
 
 %w{debian ubuntu}.each do |os|
   supports os
